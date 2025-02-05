@@ -1,0 +1,7 @@
+.env
+.idea/
+
+backend/alembic.ini
+backend/alembic/
+backend/payloads/
+backend/__pycache__/
