@@ -8,7 +8,9 @@ Python Backend: Caching Service
 │   ├── main.py              # FastAPI app entry point  
 |   ├── database.py          # Databse connection
 |   ├── utils.py             # Utility functions
-│── .env                     # Environment variables  
+│── .env                     # Environment variables
+│── .gitignore               # Git ignore file
+│── .dockerignore            # Docker ignore file
 │── Dockerfile               # Docker setup  
 │── docker-compose.yml       # Docker compose file  
 │── requirements.txt         # Python dependencies  
