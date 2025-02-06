@@ -30,6 +30,11 @@ services:
       - "8040:${BACKEND_PORT}"
     volumes:
       - ./backend:/app
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres_data:
