@@ -3,15 +3,20 @@ import os
 import uuid
 from http import HTTPStatus
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from redis import asyncio
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from sqlalchemy.orm import Session
+
+from database import get_db
 
 from utils import (
     transformer_function,
-    check_cached_data
+    check_cached_data,
+    store_data_in_db,
+    check_data_in_db
 )
 from constants import (
     DATA_NOT_PROVIDED,
@@ -50,20 +55,30 @@ class FileSchema(BaseModel):
 
 
 @app.get("/payload/{file_id}/")
-async def read_payload(file_id: str):
+async def read_payload(file_id: str, db: Session = Depends(get_db)):
     """
     GET request to read a stored payload file, transform the lists, and return the result.
     Caching the result to avoid recomputing the transformer function.
+
+    Functionality:  First queries in cache based on file_id, of found, return.
+                    If not found in cache, query in db. If found, return.
+                    If not found in either, then fetch from the file.
+    :param db:
     :param file_id:
     :return output_data:
     """
     cache_key = f"read_payload:file_id={file_id}"
     cached_result = await check_cached_data(cache_key)
     if cached_result:
-        return json.loads(cached_result)
+        cached_result = json.loads(cached_result)
+        store_data_in_db(db, file_id, cached_result)
+        return cached_result
+
+    db_data = check_data_in_db(db, file_id)
+    if db_data:
+        return {"output": db_data.data}
 
     file_path = os.path.join(STORAGE_DIR, f"{file_id}.json")
-
     if not os.path.exists(file_path):
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,

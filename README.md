@@ -1,5 +1,8 @@
 Python Backend: Caching Service
-- A simple Python FastAPI service with a GET and POST request to save user input as JSON file and serve data with caching functionality
+- A simple Python FastAPI service with a 
+- GET and POST request to save user input as 
+- JSON file and serve data with caching functionality
+- alternately saving cached data into db table. 
 
 📂 fast_assigment/
 │── 📂 backend/              # Main application code  
@@ -33,8 +36,8 @@ Go into .env file inside alembic folder and
 
 to 
 
-`from models import Base
-target_metadata = Base.metadata`
+`from models import Base`
+`target_metadata = Base.metadata`
 
 Then run: 
 `alembic revision --autogenerate -m "Initial migration"`
