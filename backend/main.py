@@ -114,13 +114,13 @@ def create_payload(payload: FileSchema):
             detail=DATA_NOT_PROVIDED
         )
 
-    if not isinstance(payload.dict(), dict):
+    if not isinstance(payload.model_dump(), dict):
         return HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
             detail=INVALID_FORMAT
         )
 
-    lists = [v for v in payload.dict().values() if isinstance(v, list)]
+    lists = [v for v in payload.model_dump().values() if isinstance(v, list)]
     if len(lists) != 2:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
@@ -132,7 +132,7 @@ def create_payload(payload: FileSchema):
         file_path = os.path.join(STORAGE_DIR, f"{file_id}.json")
 
         with open(file_path, "w", encoding="utf-8") as json_file:
-            json.dump(payload.dict(), json_file, indent=4)
+            json.dump(payload.model_dump(), json_file, indent=4)
 
         return {"message": CREATED, "data": {"id": file_id}}
 

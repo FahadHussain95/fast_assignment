@@ -6,3 +6,4 @@ sqlalchemy
 python-dotenv
 redis>=4.0
 fastapi-cache2
+pytest

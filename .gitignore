@@ -1,6 +1,7 @@
 .env
 .idea/
 
+backend/.pytest_cache
 backend/alembic.ini
 backend/alembic/
 backend/payloads/
